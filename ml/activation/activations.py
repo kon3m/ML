@@ -1,4 +1,4 @@
-#from math import exp
+from math import exp
 from ..test_shape import wrapper
 import numpy as np
 def sigmoid(X,prime=False):
@@ -20,12 +20,6 @@ def tanh(X):
 	else:
 		X=np.array(X)
 		return tanh(X)
-def softmax(X):
-	"""an activation function which outputs the value between (0,1)"""
-	_X=np.full(X.shape,np.inf)
-	for i in range(len(X)):
-		_X[i]=exp(X[i])/(np.sum(np.exp(X),axis=0))
-	return _X
 def relu(X,prime=False):
 	if prime:
 		X = np.array(X)
@@ -64,7 +58,7 @@ def stable_sigmoid(X,prime=False):
 		else:
 				z=exp(X)
 				return z/(1.0+z)
-def stable_softmax(X):
+def softmax(X):
 	y = X - np.max(X)
 	exp = np.exp(y)
 	return exp/np.sum(exp)
