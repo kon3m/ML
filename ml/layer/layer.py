@@ -22,9 +22,9 @@ class Layer:
 	def get_activation(self):return self.activation
 		
 	def set_weights(self,prev_l_u=1):
-		self.weights=np.random.rand(self.units,prev_l_u)
+		self.weights=0.1*(np.random.RandomState(0).rand(self.units,prev_l_u))
 		#self.weights.dtype="float32"
-		self.biases=np.random.rand(self.units,1)
+		self.biases=0.1*(np.random.RandomState(0).rand(self.units,1))
 	def _feed_forward(self,X):
 		self.layer_activations=X
 	@property
