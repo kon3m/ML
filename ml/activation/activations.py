@@ -58,7 +58,10 @@ def stable_sigmoid(X,prime=False):
 		else:
 				z=exp(X)
 				return z/(1.0+z)
-def softmax(X):
+def softmax(X,prime=False):
+	if prime:
+		y=X.reshape(-1,1)
+		return np.diagflat(y) - np.dot(y, y.T)
 	y = X - np.max(X)
 	exp = np.exp(y)
 	return exp/np.sum(exp)

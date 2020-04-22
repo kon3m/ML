@@ -2,8 +2,11 @@ import numpy as np
 from ..activation import activations 
 from ml import losses
 class Layer:
-	def __init__(self,units=None,activation=None):
+	def __init__(self,units=None,activation=None,set_bias=False):
 		self.units=units
+		if set_bias:
+			self.set_bias=True
+		else:self.set_bias=False
 		try:
 			self.activation=activations.__dict__[activation]
 		except :raise ValueError("no such activation function")
@@ -22,9 +25,10 @@ class Layer:
 	def get_activation(self):return self.activation
 		
 	def set_weights(self,prev_l_u=1):
-		self.weights=0.1*(np.random.RandomState(0).rand(self.units,prev_l_u))
+		self.weights=0.1*np.random.randn(self.units,prev_l_u)
 		#self.weights.dtype="float32"
-		self.biases=0.1*(np.random.RandomState(0).rand(self.units,1))
+		if self.set_bias:
+			self.biases=0.1*(np.random.RandomState(0).rand(self.units,1))
 	def _feed_forward(self,X):
 		self.layer_activations=X
 	@property
@@ -39,10 +43,13 @@ class Layer:
 	def loss(self,l):
 		self._loss=l
 class DNN(Layer):
-	def __init__(self,units=None,activation=None):
-		Layer.__init__(self,units=units,activation=activation)
+	def __init__(self,units=None,activation=None,set_bias=False):
+		Layer.__init__(self,units=units,activation=activation,set_bias=set_bias)
 	def _feed_forward(self,X):
-		self.weighted_sum=np.dot(self.weights,X)+self.biases
+		if self.set_bias:
+			self.weighted_sum=np.dot(self.weights,X)+self.biases
+		else:
+			self.weighted_sum=np.dot(self.weights,X)
 		self.layer_activations=np.asarray(self.activation(self.weighted_sum))
 	def _backprop(self):pass
 		

@@ -1,5 +1,5 @@
 import os
-from scipy import misc
+from imageio import imread
 import numpy as np
 SUPPORTED_FORMATS=("png","jpg","PNG","JPG")
 IMG_SAVE_PATH = "~/Desktop/ML/results/"
@@ -31,7 +31,7 @@ def normalize(X):
 	mi=np.min(X,axis=0)
 	ma=np.max(X,axis=0)
 	r=np.zeros(X.shape)
-	r= np.divide((X-mi),(mi-ma))
+	r= np.divide((X-mi),(ma-mi))
 	return r
 def split_train_test(X,Y,per=20):
 			
@@ -167,6 +167,7 @@ class Preprocess:
 					img=self.img_to_array(os.path.join(new_path,new_dir_list[j]),shape=shape)
 					if grey_scale:
 						img=self.rgb2grey(img).flatten()
+						img=img.reshape(img.shape[0],1)
 						arr.append(img)
 					else:arr.append(img)
 				target=categorical(np.full([len(new_dir_list),],i),len(class_list))
@@ -193,8 +194,8 @@ class Preprocess:
 		
 		if not os.path.exists(path):
 				raise ValueError("Provided invalid path")
-		if shape:return np.resize(misc.imread(path),shape)
-		else:return misc.imread(path)
+		if shape:return np.resize(imread(path),shape)
+		else:return imread(path)
 	
 	def rgb2grey(self,img):
 		""" INPUT : Array of rgb image
